@@ -1,0 +1,37 @@
+<div class="container mt-3">
+  <div class="jumbotron border border-dark pt-3">
+    <h3><span class="text-primary">{{Articles.length}}</span> Saved Articles Found</h3>
+    <div class="row">
+      {{#each Articles}}
+
+      <div class="col-12">
+        <div class="card mb-2 p-3 border-dark bg-warning">
+          <a href="{{link}}" class="text-info border-bottom mb-1 pb-1" target="_blank"><h5 class="mb-0"><span class="text-dark">{{@index}}. </span>{{title}}</h5></a>
+          <p class="mb-0"><i>{{summary}}</i></p>
+          <p class="mb-0 text-center"><small>{{comment.length}} Comments</small></p>
+          <a href="article/Comments/{{_id}}" class='text-center mb-2'><button class="btn btn-outline-success">View / Add Comments</button></a>
+          <button class="btn btn-outline-danger deleteArticleBtn" data-id={{_id}}>Delete</button>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+  </div>
+</div>
+
+<script>
+
+  $('.deleteArticleBtn').on('click', function(){
+    var ArticleID={ _id: $(this).data("id")}
+    console.log(ArticleID)
+
+    $.ajax("/api/savedArticles", {
+      type: "DELETE",
+      data: ArticleID
+    }).then(function(res){
+      console.log(res);
+      alert('Article is deleted')
+      location.reload();
+    })
+  })
+</script>
