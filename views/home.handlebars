@@ -3,18 +3,18 @@
     <h3><span class="text-primary">{{Articles.length}}</span> Articles Found</h3>
     <div class="row">
       {{#each Articles}}
-
-      <div class="col-12">
-        <div class="card mb-2 p-3 border-dark">
-          <a href="{{link}}" class="text-info border-bottom mb-1 pb-1" target="_blank"><h5 class="mb-0"><span class="text-dark">{{@index}}. </span>{{title}}</h5></a>
+      <div class="col-md-6 col-lg-4 mb-3">
+        <div class="card p-3 bgIMG h-100">
+          <a href="{{link}}" class="text-dark font-weight-bold border-bottom mb-1 pb-1" target="_blank"><h5 class="mb-0"><span class="text-dark">{{@index}}. </span>{{title}}</h5></a>
           <p class="mb-3"><i>"{{summary}}"</i></p>
-          <p class="mb-0 text-center"><small>{{comment.length}} Comments</small></p>
-          <div class="d-flex justify-content-center">
-            <a href="article/Comments/{{_id}}" class='mr-1'><button class="btn btn-outline-info">Comments</button></a>
+          <p class="mb-5 text-center"><small>{{comment.length}} Comments</small></p>
+          <div class="d-flex justify-content-center" style="position: absolute; bottom: 1rem;">
+            <a href="article/Comments/{{_id}}" class='mr-1'><button class="btn btn-info">Comments</button></a>
             {{#if saved}}
-            <button type="button" class="btn btn-success" data-id={{_id}} disabled><i class="far fa-check-circle"></i> Saved</button>        
+            <button type="button" class="btn btn-success mr-1" data-id={{_id}} disabled><i class="far fa-check-circle"></i> Saved</button>
+            <button class="btn btn-danger deleteArticleBtn" data-id={{_id}}>X</button>        
             {{else}}
-            <button class="btn btn-outline-success saveArticleBtn" data-id={{_id}}>Add to saved</button>  
+            <button class="btn btn-success saveArticleBtn" data-id={{_id}}>Add to saved</button>
             {{/if}}
           </div>
         </div>
@@ -30,14 +30,25 @@
   $('.saveArticleBtn').on('click', function(){
     var ArticleID={ _id: $(this).data("id")}
     console.log(ArticleID)
-
     $.ajax("/api/savedArticles", {
       type: "PUT",
       data: ArticleID
     }).then(function(res){
       console.log(res);
-      alert('You have saved this article')
     })
     location.reload();
+  })
+
+  $('.deleteArticleBtn').on('click', function(){
+    var ArticleID={ _id: $(this).data("id")}
+    console.log(ArticleID)
+
+    $.ajax("/api/savedArticles", {
+      type: "DELETE",
+      data: ArticleID
+    }).then(function(res){
+      console.log(res);
+      location.reload();
+    })
   })
 </script>

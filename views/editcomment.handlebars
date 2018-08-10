@@ -3,21 +3,25 @@
     <div class="row">
       {{!-- {{#each Article}} --}}
       <div class="col-12">
+        <div class="mb-2">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">New Comment</button>         
+        </div>
         <div class="card mb-2 p-3 border-dark">
           <a href="{{Article.link}}" class="text-info border-bottom mb-1 pb-1" target="_blank"><h5 class="mb-0">{{Article.title}}</h5></a>
           <p class="mb-0"><i>{{Article.summary}}</i></p>
         </div>
-        <div class="card p-3 mb-3">
-          <textarea class="w-100 mb-3" type="text" id="commentInput" placeholder="Type Your Comment Here..."></textarea>
-          <button class="btn btn-outline-danger" id="addNewCommentBtn" data-id={{Article._id}}>Submit Comment</button>
-        </div>
         {{#each Article.comment}}
-          <div class="card p-3 mb-1"> 
-            <p class='text-dark'><small><i>"{{body}}"</i></small></p>
-            <button class="btn btn-danger removeCommentBtn" data-id={{_id}}>DeleteComment</button>
-
+          <div class="card mb-1"> 
+            <div class="card-body">
+              <h5 class='text-dark'><i>"{{body}}"</i></h5>
+              <div class="bg-light p-1 border border-dark mb-2">
+                <p class="mb-0"><small>{{username}}</small></p>              
+                <p class="mb-0"><small><b>{{occupation}}</b></small></p>
+              </div>
+               <button href="/article/Comments/{{_id}}" class="btn btn-sm btn-danger removeCommentBtn" data-id={{_id}}>Delete This Comment</button>
+            </div>
           </div>
-          {{/each}}
+        {{/each}}
 
       </div>
       {{!-- {{/each}} --}}
@@ -26,13 +30,39 @@
   </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="mb-2 w-100" id="userName" placeholder="Your Name Here...">
+        <input type="text" class="mb-2 w-100" id="occupation" placeholder="Your Job...">
+        <textarea name="" id="commentInput" class="w-100" rows="10" placeholder="Type your sarcastic comment here"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="addNewCommentBtn" data-id="{{Article._id}}">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 
   $("#addNewCommentBtn").on("click", function(){
     var ArticleID={ 
       _id: $(this).data("id"),
+      username: $("#userName").val().trim(),
+      occupation: $("#occupation").val().trim(),
       body: $("#commentInput").val().trim()
     }
+    console.log(ArticleID)
     $.ajax('/api/addComment',{
       method: "POST",
       data: ArticleID

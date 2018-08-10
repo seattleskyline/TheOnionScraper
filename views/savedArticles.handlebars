@@ -5,12 +5,19 @@
       {{#each Articles}}
 
       <div class="col-12">
-        <div class="card mb-2 p-3 border-dark bg-warning">
-          <a href="{{link}}" class="text-info border-bottom mb-1 pb-1" target="_blank"><h5 class="mb-0"><span class="text-dark">{{@index}}. </span>{{title}}</h5></a>
-          <p class="mb-0"><i>{{summary}}</i></p>
-          <p class="mb-0 text-center"><small>{{comment.length}} Comments</small></p>
-          <a href="article/Comments/{{_id}}" class='text-center mb-2'><button class="btn btn-outline-success">View / Add Comments</button></a>
-          <button class="btn btn-outline-danger deleteArticleBtn" data-id={{_id}}>Delete</button>
+        <div class="card mb-2 border-dark bg-warning">
+          <div class="card-body">
+
+          
+            <a href="{{link}}" class="bg-light text-primary border-bottom mb-1 pb-1" target="_blank"><h5 class="mb-0 bg-light border border-dark p-1"><b><span class="text-dark">{{@index}}. </span>{{title}}</b></h5></a>
+            <p class="mb-0"><i>{{summary}}</i></p>
+            <p class="mb-0 text-center"><small>{{comment.length}} Comments</small></p>
+            <div class="d-flex justify-content-center">
+              <a href="article/Comments/{{_id}}"><button class="btn btn-success mr-1">Comments</button></a>
+              <button class="btn btn-danger deleteArticleBtn" data-id={{_id}}>Unsave</button>              
+            </div>
+
+          </div>
         </div>
       </div>
       {{/each}}
@@ -30,7 +37,6 @@
       data: ArticleID
     }).then(function(res){
       console.log(res);
-      alert('Article is deleted')
       location.reload();
     })
   })
